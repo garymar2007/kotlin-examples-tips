@@ -10,6 +10,9 @@ repositories {
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
+    implementation("javax.xml.bind:jaxb-api:2.3.1")
+
     testImplementation(kotlin("test"))
 }
 
