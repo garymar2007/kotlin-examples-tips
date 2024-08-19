@@ -1,9 +1,6 @@
 package org.gary
 
 import java.io.File
-import java.time.LocalDate
-import java.time.format.DateTimeParseException
-import javax.xml.bind.JAXBContext
 import javax.xml.bind.Unmarshaller
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
@@ -38,7 +35,24 @@ fun main() {
 //    val unmarshaller = jaxbContext.createUnmarshaller()
 //    val product: Product = unmarshaller.unmarshal("src/main/resources/product.xml")
 
-    inlineFunction { println("Hello, Kotlin!") }
+    //inlineFunction { println("Hello, Kotlin!") }
+
+    val toc = tableOfContents(
+        "The Joy of Kotlin",
+        listOf(
+            Content("Introduction", 1),
+            Content("Chapter 1: Basics", 5),
+            Content("Chapter 2: Functions", 10),
+            Content("Chapter 3: Classes", 20),
+            Content("Chapter 4: Advanced Topics", 30),
+            Content("Conclusion", 38)
+        ),
+        "2018, Pierre-Yves Saumont"
+    )
+    if (toc is MutableList<String>) {
+        toc[0] = "This is a mutable list"
+    }
+    toc.forEach(::println)
 }
 
 fun <T> secondItemOf(list: List<T>): T {
@@ -65,4 +79,22 @@ inline fun inlineFunction(block: () -> Unit) {
     println("Before calling block")
     block()
     println("After calling block")
+}
+
+data class Content(val title: String, val pageNumber: Int)
+
+fun tableOfContents(bookTitle: String,
+                           contents: List<Content>,
+                           copyright: String?): List<String> = buildList {
+    add(bookTitle.uppercase())
+    add("Table of Contents")
+    add("------------------------------------------")
+    contents.mapIndexedTo(this) {
+        num, c -> "${num + 1}. ${c.title} - ${c.pageNumber}"
+    }
+    add("------------------------------------------")
+    if (copyright != null) {
+        add("")
+        add("© $copyright")
+    }
 }
