@@ -1,5 +1,8 @@
 package org.gary
 
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toImmutableList
 import java.io.File
 import javax.xml.bind.Unmarshaller
 import javax.xml.bind.annotation.XmlElement
@@ -49,9 +52,9 @@ fun main() {
         ),
         "2018, Pierre-Yves Saumont"
     )
-    if (toc is MutableList<String>) {
-        toc[0] = "This is a mutable list"
-    }
+    val newToc = (toc as PersistentList<String>).set(0, "This is a mutable list")
+    newToc.forEach(::println)
+    println("#################################################")
     toc.forEach(::println)
 }
 
@@ -85,7 +88,7 @@ data class Content(val title: String, val pageNumber: Int)
 
 fun tableOfContents(bookTitle: String,
                            contents: List<Content>,
-                           copyright: String?): List<String> = buildList {
+                           copyright: String?): ImmutableList<String> = buildList {
     add(bookTitle.uppercase())
     add("Table of Contents")
     add("------------------------------------------")
@@ -97,4 +100,4 @@ fun tableOfContents(bookTitle: String,
         add("")
         add("© $copyright")
     }
-}
+}.toImmutableList()
