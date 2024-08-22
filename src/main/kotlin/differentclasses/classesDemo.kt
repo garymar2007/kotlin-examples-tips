@@ -61,6 +61,26 @@ value class BookYear(val value: Int)
 
 data class Book2(val id: BookId, val title: BookTitle, val author: BookAuthor, val year: BookYear)
 
+@JvmInline
+value class Person(private val fullName: String) {
+    init {
+        require(fullName.isNotEmpty()) {
+            "Full name shouldn't be empty"
+        }
+    }
+
+    constructor(firstName: String, middleName: String?, lastName: String)
+            : this("$firstName $middleName $lastName"){
+                require(lastName.isNotBlank()) {
+                    "Last name shouldn't be empty"
+                }
+            }
+    val length: Int get() = fullName.length
+    fun greet() {
+        println("Hello $fullName")
+    }
+}
+
 fun main() {
     val metrics = SocialMediaPost.Metrics(100, 10, 10, 5);
     val post = SocialMediaPost(1, "Hello, Kotlin!", metrics)
@@ -77,5 +97,10 @@ fun main() {
 
     val (_, title2, author2, year2) = myBook2
     println("Title: ${title2.value}, Author: ${author2.value}, Year: ${year2.value}")
+
+    val person: Person = Person("Gary Ma")
+    val person2: Person = Person("Zhenyu", "Gary", "Ma")
+    println(person.length)
+    println(person2.length)
 }
 
