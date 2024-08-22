@@ -81,6 +81,15 @@ value class Person(private val fullName: String) {
     }
 }
 
+interface MyInterface {
+    fun doSomething() {
+        println("MyInterface::doSomething")
+    }
+}
+
+@JvmInline
+value class MyInterfaceWrapper(val myInterface: MyInterface): MyInterface by myInterface
+
 fun main() {
     val metrics = SocialMediaPost.Metrics(100, 10, 10, 5);
     val post = SocialMediaPost(1, "Hello, Kotlin!", metrics)
@@ -102,5 +111,12 @@ fun main() {
     val person2: Person = Person("Zhenyu", "Gary", "Ma")
     println(person.length)
     println(person2.length)
+
+    val my = MyInterfaceWrapper(object: MyInterface{
+        override fun doSomething(){
+            println("Delegation class:: doSomething")
+        }
+    })
+    println(my.doSomething())
 }
 
